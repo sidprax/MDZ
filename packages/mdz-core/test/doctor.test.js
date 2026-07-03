@@ -6,16 +6,24 @@ import path from "node:path";
 import { installMdz, runDoctor, renderDoctorReport } from "../src/index.js";
 
 test("runDoctor verifies local MDZ setup", async () => {
-  const report = await runDoctor({
-    platform: "generic",
-    quickBenchmark: false
-  });
+  const target = await mkdtemp(path.join(os.tmpdir(), "mdz-doctor-generic-"));
+  try {
+    await installMdz({ platform: "generic", sourceRoot: process.cwd(), target });
+    const report = await runDoctor({
+      platform: "generic",
+      sourceRoot: process.cwd(),
+      target,
+      quickBenchmark: false
+    });
 
-  assert.equal(report.ready, true);
-  assert.equal(report.platform, "generic");
-  assert.ok(report.summary.checks >= 5);
-  assert.ok(report.checks.some((check) => check.name === "MCP server" && check.status === "pass"));
-  assert.match(renderDoctorReport(report), /MDZ Doctor/);
+    assert.equal(report.ready, true);
+    assert.equal(report.platform, "generic");
+    assert.ok(report.summary.checks >= 5);
+    assert.ok(report.checks.some((check) => check.name === "MCP server" && check.status === "pass"));
+    assert.match(renderDoctorReport(report), /MDZ Doctor/);
+  } finally {
+    await rm(target, { recursive: true, force: true });
+  }
 });
 
 test("runDoctor verifies a separate target project", async () => {

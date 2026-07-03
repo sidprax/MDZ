@@ -1,11 +1,14 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { readFile, rm } from "node:fs/promises";
+import { mkdtemp, readFile, rm } from "node:fs/promises";
+import os from "node:os";
+import path from "node:path";
 import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 import { StdioClientTransport } from "@modelcontextprotocol/sdk/client/stdio.js";
 
 test("MDZ MCP server lists and calls core tools over stdio", async () => {
   const outputLedgerFile = ".mdz/test-mcp-output-ledger.jsonl";
+  const target = await mkdtemp(path.join(os.tmpdir(), "mdz-mcp-doctor-"));
   await rm(outputLedgerFile, { force: true });
   const client = new Client({
     name: "mdz-test-client",
@@ -145,10 +148,22 @@ test("MDZ MCP server lists and calls core tools over stdio", async () => {
 
     assert.equal(comparison.structuredContent.passed, true);
 
+    const install = await client.callTool({
+      name: "install_mdz",
+      arguments: {
+        platform: "generic",
+        sourceRoot: process.cwd(),
+        target
+      }
+    });
+    assert.equal(install.structuredContent.installed, true);
+
     const doctor = await client.callTool({
       name: "doctor",
       arguments: {
-        platform: "generic"
+        platform: "generic",
+        sourceRoot: process.cwd(),
+        target
       }
     });
 
@@ -322,5 +337,6 @@ test("MDZ MCP server lists and calls core tools over stdio", async () => {
     assert.ok(cacheStability.structuredContent.metrics.invalidatedTokens > 0);
   } finally {
     await client.close();
+    await rm(target, { recursive: true, force: true });
   }
 });
