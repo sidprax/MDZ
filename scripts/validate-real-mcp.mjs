@@ -62,7 +62,7 @@ try {
 
   const called = await client.callTool({
     name: "mdz_call_tool",
-    arguments: { tool: "filesystem__read_text_file", arguments: { path: noisyFile } }
+    arguments: { tool: "filesystem__read_text_file", arguments: { path: path.basename(noisyFile) } }
   });
   assert.equal(called.structuredContent?.mdz?.applied, true);
   assert.ok(called.structuredContent.mdz.savedTokens > 1000);
