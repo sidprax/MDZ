@@ -148,7 +148,7 @@ test("MDZ MCP server lists and calls core tools over stdio", async () => {
     const doctor = await client.callTool({
       name: "doctor",
       arguments: {
-        platform: "antigravity"
+        platform: "generic"
       }
     });
 
