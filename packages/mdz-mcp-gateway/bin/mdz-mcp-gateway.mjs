@@ -94,21 +94,6 @@ async function reduceToolResult(result, tool) {
   const mirroredStructuredContent = result.structuredContent === undefined
     ? undefined
     : replaceMirroredText(result.structuredContent, original, null);
-  if (result.structuredContent !== undefined && mirroredStructuredContent.replacements === 0) {
-    const observation = await prepareModelFacingReduction(original, {
-      policy: { ...policy, mode: "observe" },
-      storeDir: policy.storeDir,
-      sourceLabel: tool.name
-    });
-    observation.mode = policy.mode;
-    observation.reason = "structured-content-preserved";
-    await recordModelFacingObservation(observation, {
-      source: { boundary: "mcp-gateway", server: tool.namespace, tool: tool.upstreamName },
-      ledgerFile: config.ledgerFile,
-      type: "tool-output"
-    });
-    return result;
-  }
   const reduction = await prepareModelFacingReduction(original, {
     policy,
     storeDir: policy.storeDir,
@@ -128,7 +113,9 @@ async function reduceToolResult(result, tool) {
   const nonText = (result.content ?? []).filter((item) => item.type !== "text");
   const reducedStructuredContent = result.structuredContent === undefined
     ? undefined
-    : replaceMirroredText(result.structuredContent, original, reduction.replacement).value;
+    : mirroredStructuredContent.replacements === 0
+      ? result.structuredContent
+      : replaceMirroredText(result.structuredContent, original, reduction.replacement).value;
   const mdz = {
     applied: true,
     handle: reduction.handle,
