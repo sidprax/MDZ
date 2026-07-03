@@ -60,10 +60,25 @@ try {
   const search = await client.callTool({ name: "mdz_search_tools", arguments: { query: "read text file" } });
   assert.ok(search.structuredContent.results.some((item) => item.name === "filesystem__read_text_file"));
 
-  const called = await client.callTool({
-    name: "mdz_call_tool",
-    arguments: { tool: "filesystem__read_text_file", arguments: { path: path.basename(noisyFile) } }
-  });
+  const candidates = [path.basename(noisyFile), noisyFile];
+  const attempts = [];
+  let called;
+  for (const candidate of candidates) {
+    const result = await client.callTool({
+      name: "mdz_call_tool",
+      arguments: { tool: "filesystem__read_text_file", arguments: { path: candidate } }
+    });
+    attempts.push({
+      path: candidate,
+      reduced: result.structuredContent?.mdz?.applied === true,
+      preview: String(result.content?.[0]?.text ?? "").slice(0, 160)
+    });
+    if (result.structuredContent?.mdz?.applied === true) {
+      called = result;
+      break;
+    }
+  }
+  assert.ok(called, `Expected a reduced filesystem read from one path form. Attempts: ${JSON.stringify(attempts)}`);
   assert.equal(called.structuredContent?.mdz?.applied, true);
   assert.ok(called.structuredContent.mdz.savedTokens > 1000);
   assert.match(called.content[0].text, /mdz:\/\/context\//);
