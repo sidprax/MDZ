@@ -1,0 +1,23 @@
+2026-06-16T09:58:01.101Z INFO request complete method=GET path=/health status=200 duration_ms=4 request_id=req_001
+2026-06-16T09:58:02.102Z INFO request complete method=GET path=/metrics status=200 duration_ms=8 request_id=req_002
+2026-06-16T09:58:03.103Z INFO request complete method=GET path=/health status=200 duration_ms=5 request_id=req_003
+2026-06-16T09:58:04.104Z INFO request complete method=GET path=/metrics status=200 duration_ms=9 request_id=req_004
+2026-06-16T09:58:05.105Z INFO request complete method=GET path=/health status=200 duration_ms=5 request_id=req_005
+2026-06-16T09:59:01.201Z WARN auth token refresh latency high user=usr_123 duration_ms=1840 request_id=req_100
+2026-06-16T09:59:02.202Z INFO request complete method=POST path=/login status=200 duration_ms=240 request_id=req_101
+2026-06-16T09:59:03.203Z INFO request complete method=GET path=/dashboard status=200 duration_ms=38 request_id=req_102
+2026-06-16T10:00:01.301Z ERROR database timeout operation=select_user_by_token duration_ms=5000 request_id=req_200
+2026-06-16T10:00:01.302Z ERROR login failed reason=database_timeout user=usr_123 request_id=req_200
+2026-06-16T10:00:01.303Z ERROR Error: connection pool exhausted
+    at acquireConnection (src/db/pool.js:88:11)
+    at async findUserByToken (src/auth/repository.js:51:18)
+    at async validateToken (src/auth/service.js:74:12)
+    at async loginHandler (src/routes/login.js:33:20)
+2026-06-16T10:00:02.304Z WARN retrying database operation attempt=1 request_id=req_200
+2026-06-16T10:00:03.305Z ERROR database timeout operation=select_user_by_token duration_ms=5000 request_id=req_201
+2026-06-16T10:00:03.306Z ERROR login failed reason=database_timeout user=usr_456 request_id=req_201
+2026-06-16T10:00:04.307Z INFO request complete method=GET path=/health status=200 duration_ms=6 request_id=req_202
+2026-06-16T10:00:05.308Z INFO request complete method=GET path=/metrics status=200 duration_ms=10 request_id=req_203
+2026-06-16T10:00:06.309Z WARN database pool usage high active=50 idle=0 max=50 request_id=req_204
+2026-06-16T10:00:07.310Z INFO request complete method=GET path=/health status=200 duration_ms=5 request_id=req_205
+2026-06-16T10:00:08.311Z INFO request complete method=GET path=/metrics status=200 duration_ms=9 request_id=req_206

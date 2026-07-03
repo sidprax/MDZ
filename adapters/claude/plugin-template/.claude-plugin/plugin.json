@@ -1,0 +1,11 @@
+{
+  "name": "mdz",
+  "version": "0.1.0",
+  "description": "MDZ Token Advisor reduces Claude Code token usage with observe, suggest, and safe modes.",
+  "author": {
+    "name": "MDZ"
+  },
+  "skills": "./skills",
+  "hooks": "./hooks/hooks.json",
+  "mcpServers": "./.mcp.json"
+}

@@ -1,0 +1,24 @@
+{
+  "name": "mdz",
+  "version": "0.1.0",
+  "description": "A token-savings advisor for agentic workflows.",
+  "author": {
+    "name": "MDZ"
+  },
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "MDZ Token Advisor",
+    "shortDescription": "Get clear token-saving suggestions without changing how you ask agents to work.",
+    "longDescription": "MDZ Token Advisor checks prompts, tool output, and session history for safe token savings. It recommends whether to apply, ask, or skip optimization, and always shows expected savings, risk, latency, and local cache impact.",
+    "developerName": "MDZ",
+    "category": "Productivity",
+    "capabilities": [
+      "Token savings advisor",
+      "Prompt and session checks",
+      "Tool output review",
+      "Savings and downside reports"
+    ],
+    "defaultPrompt": "Ask MDZ Token Advisor whether this session can be optimized safely."
+  },
+  "mcpServers": "./.mcp.json"
+}

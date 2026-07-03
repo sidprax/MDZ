@@ -1,0 +1,96 @@
+{
+  "tools": [
+    {
+      "name": "read_file",
+      "description": "Read a text file from the workspace and return its contents. Use this tool when source code, configuration, documentation, or generated output must be inspected. Prefer focused ranges for large files and avoid reading the same file repeatedly when an unchanged result is already available.",
+      "inputSchema": {
+        "type": "object",
+        "required": ["path"],
+        "properties": {
+          "path": {
+            "type": "string",
+            "description": "Absolute or workspace-relative path of the file to read. The file must exist and be accessible to the current workspace process.",
+            "examples": ["src/auth/session.ts"]
+          },
+          "startLine": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "Optional one-based first line to return when only a focused range is needed."
+          },
+          "endLine": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "Optional one-based final line to return when only a focused range is needed."
+          }
+        }
+      }
+    },
+    {
+      "name": "run_terminal_command",
+      "description": "Run a terminal command in the current workspace and return standard output, standard error, and the exit code. Use focused commands and avoid producing unbounded output. Set a timeout for commands that may block or wait for external resources.",
+      "inputSchema": {
+        "type": "object",
+        "required": ["command"],
+        "properties": {
+          "command": {
+            "type": "string",
+            "description": "Command line to execute using the workspace shell. Quote paths carefully and avoid destructive commands unless the user explicitly requested them.",
+            "examples": ["npm test"]
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 600000,
+            "default": 10000,
+            "description": "Maximum time in milliseconds to allow the command to run before it is terminated."
+          }
+        }
+      }
+    },
+    {
+      "name": "find_symbol_references",
+      "description": "Find every reference to a code symbol across the workspace, including imports, declarations, calls, and type references. Use this specialized tool when lexical text search is insufficient or when language-aware reference resolution is required.",
+      "inputSchema": {
+        "type": "object",
+        "required": ["symbol"],
+        "properties": {
+          "symbol": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Exact symbol name whose declarations and references should be located in source files.",
+            "examples": ["createSession"]
+          },
+          "includeDeclaration": {
+            "type": "boolean",
+            "default": true,
+            "description": "Whether the result should include the symbol declaration in addition to references."
+          }
+        }
+      }
+    },
+    {
+      "name": "create_project_issue",
+      "description": "Create an issue in the configured project tracker with a title, description, labels, and optional assignee. Use this only when the user asks to record work externally, because it changes remote project state.",
+      "inputSchema": {
+        "type": "object",
+        "required": ["title", "body"],
+        "properties": {
+          "title": {
+            "type": "string",
+            "maxLength": 200,
+            "description": "Concise issue title describing the actionable problem or requested enhancement."
+          },
+          "body": {
+            "type": "string",
+            "description": "Markdown issue description containing context, acceptance criteria, and relevant evidence."
+          },
+          "labels": {
+            "type": "array",
+            "items": { "type": "string" },
+            "description": "Optional project labels to apply when those labels already exist."
+          }
+        }
+      }
+    }
+  ]
+}

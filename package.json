@@ -1,0 +1,25 @@
+{
+  "name": "mdz",
+  "version": "0.1.0",
+  "description": "Modum Delta Zero token advisor for agentic coding platforms.",
+  "private": true,
+  "type": "module",
+  "license": "MIT",
+  "scripts": {
+    "test": "node --test",
+    "validate:real-mcp": "node scripts/validate-real-mcp.mjs",
+    "release:check": "npm test && npm run validate:real-mcp && npm run mdz -- doctor all --format text --quick-benchmark",
+    "mdz": "node packages/mdz-core/bin/mdz-core.mjs",
+    "mdz:mcp": "node packages/mdz-mcp-server/bin/mdz-mcp-server.mjs",
+    "mdz:gateway": "node packages/mdz-mcp-gateway/bin/mdz-mcp-gateway.mjs"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.29.0"
+  },
+  "devDependencies": {
+    "@modelcontextprotocol/server-filesystem": "^2026.1.14"
+  }
+}

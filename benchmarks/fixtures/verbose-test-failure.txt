@@ -1,0 +1,44 @@
+PASS auth creates a new session
+PASS auth rejects missing token
+PASS auth refreshes active token
+PASS auth records audit event
+PASS auth supports remember-me cookie
+PASS auth validates password reset token
+PASS billing creates invoice
+PASS billing applies coupon
+PASS billing rejects expired coupon
+PASS users creates profile
+PASS users updates profile
+PASS users rejects duplicate email
+PASS api health check returns ok
+PASS api metrics include uptime
+PASS api metrics include request count
+PASS api metrics include error count
+PASS api metrics include p95 latency
+PASS cache reads existing key
+PASS cache expires stale key
+PASS cache ignores missing key
+FAIL auth validates expired token
+  AssertionError: Expected status 401 Received status 200
+  Expected: {"error":"token_expired"}
+  Received: {"ok":true,"userId":"usr_123"}
+    at tests/auth.validation.test.js:142:17
+    at async runCase (tests/helpers/run-case.js:38:5)
+    at async Object.<anonymous> (tests/auth.validation.test.js:139:3)
+PASS api rejects malformed json
+PASS api rejects oversized body
+PASS api returns correlation id
+PASS api handles retry token
+PASS database migrates users
+PASS database migrates billing
+PASS database rolls back failed migration
+PASS workers enqueue email
+PASS workers retry failed email
+PASS workers dead-letter poison job
+PASS notifications sends welcome email
+PASS notifications sends reset email
+PASS notifications skips disabled channel
+PASS web renders dashboard
+PASS web renders login
+PASS web redirects logged-out user
+PASS web handles csrf failure

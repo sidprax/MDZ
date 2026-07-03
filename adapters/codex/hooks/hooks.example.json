@@ -1,0 +1,29 @@
+{
+  "hooks": {
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"<MDZ_ROOT>/adapters/codex/hooks/user-prompt-submit.mjs\"",
+            "timeout": 30,
+            "statusMessage": "MDZ checks this prompt under the active token policy"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"<MDZ_ROOT>/adapters/codex/hooks/post-tool-use.mjs\"",
+            "timeout": 30,
+            "statusMessage": "MDZ reviews tool output; gateway reductions apply separately"
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,32 @@
+name: CI
+
+on:
+  push:
+    branches: ["main", "master"]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  test:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+        node: [22, 24]
+    runs-on: ${{ matrix.os }}
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+          cache: npm
+      - run: npm ci
+      - run: npm test
+      - run: npm run validate:real-mcp
+      - run: npm run mdz -- install codex --scope project --mode observe
+      - run: npm run mdz -- install antigravity --scope project --mode observe
+      - run: npm run mdz -- install claude --scope project --mode observe
+      - run: npm run mdz -- install generic --mode observe
+      - run: npm run mdz -- doctor all --format text --quick-benchmark

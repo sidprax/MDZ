@@ -1,0 +1,140 @@
+version: 1
+required_report_metrics:
+  savings:
+    - estimated_input_tokens
+    - estimated_output_tokens
+    - estimated_total_tokens
+    - estimated_tokens_saved
+    - estimated_percent_saved
+  downsides:
+    - added_local_latency_ms
+    - added_wall_clock_latency_ms
+    - local_cpu_work
+    - local_memory_bytes
+    - local_disk_bytes
+    - extra_mdz_tool_calls
+    - user_approval_prompts
+    - handle_expansions
+    - quality_risk
+    - privacy_cache_sensitivity
+scenarios:
+  - id: verbose-test-failure
+    name: Verbose Test Failure
+    priority: mvp
+    description: Run tests and fix one failing function while minimizing verbose test output.
+    stressors:
+      - verbose command output
+      - repeated stack traces
+      - many passing tests
+    mdz_modes:
+      - observe
+      - suggest
+      - safe
+      - balanced
+    success_checks:
+      - tests pass
+      - failing test identity preserved
+      - assertion detail preserved
+      - no workflow breakage
+    expected_savings: high
+
+  - id: large-log-root-cause
+    name: Large Log Root Cause
+    priority: mvp
+    description: Identify root cause from a large noisy application log.
+    stressors:
+      - repeated log lines
+      - stack traces
+      - timestamp noise
+      - mixed severity events
+    mdz_modes:
+      - observe
+      - suggest
+      - safe
+      - balanced
+    success_checks:
+      - root cause identified
+      - relevant error windows preserved
+      - original log expandable by handle
+      - no workflow breakage
+    expected_savings: high
+
+  - id: repo-exploration
+    name: Repo Exploration
+    priority: mvp
+    description: Understand a repository and modify one endpoint or function.
+    stressors:
+      - broad file search
+      - unnecessary file reads
+      - repeated context
+    mdz_modes:
+      - observe
+      - suggest
+      - safe
+      - balanced
+    success_checks:
+      - correct files identified
+      - implementation works
+      - tests pass where available
+      - no workflow breakage
+    expected_savings: medium
+
+  - id: mcp-tool-overload
+    name: MCP Tool Overload
+    priority: later
+    description: Simulate many MCP tools and compare direct schema loading with MDZ search/defer behavior.
+    stressors:
+      - many tool definitions
+      - long schemas
+      - irrelevant tools
+    mdz_modes:
+      - observe
+      - suggest
+      - safe
+      - balanced
+    success_checks:
+      - relevant tool found
+      - schema loaded only when needed
+      - task completed
+    expected_savings: very_high
+
+  - id: long-running-session
+    name: Long Running Session
+    priority: later
+    description: Multi-turn workflow where context accumulates over time.
+    stressors:
+      - conversation history
+      - repeated decisions
+      - stale context
+      - status updates
+    mdz_modes:
+      - observe
+      - suggest
+      - safe
+      - balanced
+      - aggressive
+    success_checks:
+      - decisions preserved
+      - stale context reduced
+      - final implementation works
+    expected_savings: medium
+
+  - id: response-verbosity
+    name: Response Verbosity
+    priority: later
+    description: Compare default final answers with MDZ response profiles.
+    stressors:
+      - long final summaries
+      - repeated explanations
+      - unnecessary detail
+    mdz_modes:
+      - observe
+      - suggest
+      - safe
+      - balanced
+      - aggressive
+    success_checks:
+      - user gets necessary outcome details
+      - tests/verification included when relevant
+      - optional detail remains available
+    expected_savings: medium

@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "mdz": {
+      "command": "node",
+      "args": [
+        "<MDZ_ROOT>/packages/mdz-mcp-server/bin/mdz-mcp-server.mjs"
+      ],
+      "cwd": "<TARGET_PROJECT>"
+    }
+  }
+}

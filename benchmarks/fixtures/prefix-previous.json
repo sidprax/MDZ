@@ -1,0 +1,11 @@
+{
+  "model": "gpt-5.5",
+  "reasoningEffort": "medium",
+  "systemPrompt": "You are a coding agent. Preserve user intent and verify changes.",
+  "toolDefinitions": [
+    { "name": "read_file", "description": "Read a workspace file." },
+    { "name": "run_terminal_command", "description": "Run a workspace command." }
+  ],
+  "projectInstructions": "Run focused tests and report changed files.",
+  "conversationPrefix": "user: fix the failing authentication test"
+}

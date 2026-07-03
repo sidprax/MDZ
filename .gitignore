@@ -1,0 +1,10 @@
+node_modules/
+.mdz/
+.codex/config.toml
+.codex/hooks.json
+.agents/plugins/
+.claude/plugins/
+adapters/antigravity/mcp_config.generated.json
+adapters/generic/mcp_config.generated.json
+adapters/antigravity/plugin.generated/
+npm-debug.log*
