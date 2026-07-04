@@ -60,6 +60,7 @@ import {
   planToolDeferral,
   putSemanticCache,
   readProjectPolicy,
+  renderPromptTrimReport,
   recordLedgerEvent,
   recordFeedback,
   renderCacheReport,
@@ -87,6 +88,7 @@ import {
   scanSessionText,
   searchToolCatalog,
   storeContext,
+  trimPrompt,
   writeAdvisorReports,
   writeDashboard,
   writeLedgerReport,
@@ -176,6 +178,8 @@ try {
     await classifyTaskCommand(args);
   } else if (command === "budget") {
     await budgetCommand(args);
+  } else if (command === "trim-prompt") {
+    await trimPromptCommand(args);
   } else if (command === "contract") {
     await contractCommand(args);
   } else if (command === "secret-scan") {
@@ -785,6 +789,24 @@ async function budgetCommand(args) {
   writeJson(planContextBudget(text, { targetReduction: options.targetReduction, inputBudget: options.inputBudget, outputBudget: options.outputBudget }));
 }
 
+async function trimPromptCommand(args) {
+  const { options, positional } = parseArgs(args);
+  const text = await readInputText(positional[0] ?? options.file, options.text ?? positional.join(" "));
+  const result = trimPrompt(text, {
+    minSavingsPercent: options.minSavingsPercent,
+    mode: options.mode
+  });
+  if (options.out) await writeFile(options.out, result.reduced, "utf8");
+  const payload = {
+    ...result,
+    reduced: options.includeText === "true" ? result.reduced : undefined,
+    original: undefined,
+    outputFile: options.out
+  };
+  if (options.format === "text") console.log(renderPromptTrimReport(result));
+  else writeJson(payload);
+}
+
 async function contractCommand(args) {
   const { options, positional } = parseArgs(args);
   const text = await readInputText(positional[0] ?? options.file, options.text);
@@ -1303,6 +1325,7 @@ Usage:
   mdz-core learning-report [--format json|text]
   mdz-core classify-task <file>
   mdz-core budget <file> [--target-reduction 0.3]
+  mdz-core trim-prompt <file|--text text> [--out file] [--format json|text] [--include-text true]
   mdz-core contract <file> [--out file]
   mdz-core secret-scan <file>
   mdz-core redact <file> [--out file]

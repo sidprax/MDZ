@@ -56,6 +56,7 @@ import {
   planToolDeferral,
   putSemanticCache,
   readProjectPolicy,
+  renderPromptTrimReport,
   recommendForSession,
   recommendPolicy,
   recommendOutputBudget,
@@ -88,6 +89,7 @@ import {
   scanSessionText,
   searchToolCatalog,
   storeContext,
+  trimPrompt,
   writeAdvisorReports,
   writeDashboard,
   writeLedgerReport,
@@ -364,6 +366,32 @@ server.registerTool(
       ...result,
       source: sourceMeta({ text, file })
     });
+  }
+);
+
+server.registerTool(
+  "trim_prompt",
+  {
+    title: "Trim Prompt",
+    description: "Remove low-signal conversational wording from task prompts while preserving constraints, paths, code, and quoted/config spans.",
+    inputSchema: {
+      text: z.string().optional().describe("Prompt text to trim."),
+      file: z.string().optional().describe("Local prompt file to read and trim."),
+      minSavingsPercent: z.number().min(0).max(1).optional(),
+      mode: z.enum(MDZ_MODES).optional(),
+      includeText: z.boolean().optional().describe("Include reduced prompt text in the response."),
+      format: z.enum(["json", "text"]).optional()
+    }
+  },
+  async ({ text, file, minSavingsPercent, mode, includeText = false, format = "json" }) => {
+    const result = trimPrompt(await resolveText({ text, file }), { minSavingsPercent, mode });
+    const payload = {
+      ...result,
+      source: sourceMeta({ text, file }),
+      original: undefined,
+      reduced: includeText ? result.reduced : undefined
+    };
+    return format === "text" ? textResult(renderPromptTrimReport(result), payload) : jsonResult(payload);
   }
 );
 

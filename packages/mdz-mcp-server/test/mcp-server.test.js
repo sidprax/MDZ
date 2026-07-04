@@ -65,6 +65,7 @@ test("MDZ MCP server lists and calls core tools over stdio", async () => {
     assert.ok(toolNames.includes("learning_report"));
     assert.ok(toolNames.includes("classify_task"));
     assert.ok(toolNames.includes("plan_budget"));
+    assert.ok(toolNames.includes("trim_prompt"));
     assert.ok(toolNames.includes("create_task_contract"));
     assert.ok(toolNames.includes("scan_secrets"));
     assert.ok(toolNames.includes("redact_text"));
@@ -100,6 +101,18 @@ test("MDZ MCP server lists and calls core tools over stdio", async () => {
     assert.equal(filtered.structuredContent.kind, "test");
     assert.equal(filtered.structuredContent.riskLevel, "low");
     assert.ok(filtered.structuredContent.metrics.savedTokens >= 0);
+
+    const trimmedPrompt = await client.callTool({
+      name: "trim_prompt",
+      arguments: {
+        text: "Hi there, could you please go ahead and fix the failing auth tests if possible?",
+        includeText: true
+      }
+    });
+
+    assert.equal(trimmedPrompt.structuredContent.riskLevel, "low");
+    assert.match(trimmedPrompt.structuredContent.reduced, /fix the failing auth tests/i);
+    assert.doesNotMatch(trimmedPrompt.structuredContent.reduced, /could you please|if possible/i);
 
     const benchmark = await client.callTool({
       name: "run_benchmark",

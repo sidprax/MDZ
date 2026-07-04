@@ -21,6 +21,11 @@ Do not rewrite user intent silently. If a user prompt is long, create a compact
 task contract only when the original prompt is stored behind an MDZ handle and
 the user approves or policy allows it.
 
+Use prompt trimming only for low-signal conversational wrapping. Preserve
+constraints, negations, file paths, code/config blocks, quoted text, and
+acceptance criteria. If the text is protected-span heavy, report the savings as
+suggested rather than treating the trim as automatically safe.
+
 ## Core Workflow
 
 1. Estimate token usage for large prompts, files, command outputs, tool results,
@@ -85,6 +90,8 @@ may be expensive, use:
   diagnose probable prompt-cache reuse or cold starts.
 - `npm run mdz -- feedback <event>` and `learning-report` when the user wants MDZ to learn from outcomes.
 - `npm run mdz -- classify-task <file>` and `budget <file>` before large tasks.
+- `npm run mdz -- trim-prompt <file|--text text>` to remove low-signal prompt
+  phrasing while preserving protected spans.
 - `npm run mdz -- contract <file>` to create a compact task contract.
 - `npm run mdz -- secret-scan <file>` or `redact <file>` before caching/reporting sensitive text.
 - `npm run mdz -- repo-map` and `semantic-cache` to avoid repeated repo/file exploration.
@@ -110,7 +117,7 @@ may be expensive, use:
   `compact_tool_schemas`, `plan_tool_deferral`, `search_tool_catalog`,
   `create_prefix_snapshot`, `analyze_cache_stability`,
   `record_feedback`, `learning_report`, `classify_task`, `plan_budget`, `create_task_contract`,
-  `scan_secrets`, `redact_text`, `semantic_cache`, `repo_memory_map`,
+  `trim_prompt`, `scan_secrets`, `redact_text`, `semantic_cache`, `repo_memory_map`,
   `tool_guardrails`, `compact_state`, `create_handoff`, `diff_context`,
   `quality_check`, `attribute_savings`, `compression_experiment`,
   `project_policy`, `setup_wizard`, and `compare_context` when the MCP server

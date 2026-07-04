@@ -14,6 +14,7 @@ export { classifyTask } from "./task-classifier.js";
 export { recordFeedback, readFeedbackEvents, updateLearningProfile, createLearningReport, renderLearningReport } from "./learning.js";
 export { scanSecrets, redactText } from "./privacy.js";
 export { planContextBudget } from "./budget-planner.js";
+export { trimPrompt, renderPromptTrimReport } from "./prompt-trimmer.js";
 export { createTaskContract } from "./task-contract.js";
 export { putSemanticCache, getSemanticCache, listSemanticCache } from "./semantic-cache.js";
 export { createRepoMemoryMap } from "./repo-memory.js";

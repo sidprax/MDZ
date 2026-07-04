@@ -1,8 +1,10 @@
 # MDZ Token Advisor (Modum Delta Zero)
 
-> **Public alpha (`0.1.0`)**: MDZ is experimental. Savings are estimated,
-> automatic reduction currently applies only to MCP calls routed through the
-> gateway, and stored originals may contain sensitive local data.
+> **Public alpha (`0.1.0`)**: MDZ is experimental. When MCP calls are routed
+> through the MDZ gateway, MDZ can apply real payload reductions before content
+> reaches the agent. Token and cost savings are still estimated locally unless
+> confirmed by provider usage data. Stored originals may contain sensitive local
+> data.
 
 MDZ stands for **Modum Delta Zero**. It is a local token governance and context
 efficiency layer for agentic coding platforms such as Codex, Antigravity,
@@ -60,6 +62,8 @@ included `.gitignore` excludes those files.
 
 - Measures likely token usage before and after reductions.
 - Finds repeated, verbose, or low-signal context.
+- Trims low-signal prompt phrasing while preserving constraints, file paths,
+  code/config spans, quoted text, and negations.
 - Preserves task intent, failures, file paths, commands, decisions, and other
   evidence needed for the next agent step.
 - Filters noisy test output and logs deterministically.
@@ -326,6 +330,7 @@ npm run mdz -- feedback task-success --mode suggest --savings-percent 0.25
 npm run mdz -- learning-report --format text
 npm run mdz -- classify-task path/to/session.txt
 npm run mdz -- budget path/to/session.txt
+npm run mdz -- trim-prompt --text "Could you please help me fix the failing auth tests?"
 npm run mdz -- contract path/to/prompt.txt --out .mdz/reports/task-contract.md
 npm run mdz -- secret-scan path/to/context.txt
 npm run mdz -- redact path/to/context.txt --out .mdz/reports/redacted.txt
@@ -389,6 +394,7 @@ The local MCP server exposes:
 - `learning_report`
 - `classify_task`
 - `plan_budget`
+- `trim_prompt`
 - `create_task_contract`
 - `scan_secrets`
 - `redact_text`
