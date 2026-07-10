@@ -20,6 +20,6 @@
     "@modelcontextprotocol/sdk": "^1.29.0"
   },
   "devDependencies": {
-    "@modelcontextprotocol/server-filesystem": "^2026.1.14"
+    "@modelcontextprotocol/server-filesystem": "^2026.7.10"
   }
 }
