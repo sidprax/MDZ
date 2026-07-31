@@ -17,7 +17,7 @@
     "node": ">=22"
   },
   "dependencies": {
-    "@modelcontextprotocol/sdk": "^1.29.0"
+    "@modelcontextprotocol/sdk": "^1.30.0"
   },
   "devDependencies": {
     "@modelcontextprotocol/server-filesystem": "^2026.1.14"
